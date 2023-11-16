@@ -1,0 +1,26 @@
+:root {
+  --color-bg: rgb(41, 45, 50);
+
+  /* variables */
+  --color-1: rgb(239, 242, 249);
+  --color-2: rgb(227, 236, 242);
+  --color-3: rgb(181, 191, 198);
+  --color-4: rgb(110, 126, 140);
+
+  --color-shadow-1: rgb(250, 251, 255, 1);
+  --color-shadow-2: rgb(22, 27, 29, 0.23);
+
+  --color-text: rgb(73, 74, 75);
+}
+
+.dark-theme {
+  --color-1: rgb(18, 18, 18);
+  --color-2: rgb(28, 28, 28);
+  --color-3: rgb(69, 69, 69);
+  --color-4: rgb(110, 126, 140);
+
+  --color-shadow-1: rgb(42, 45, 50, 0.9);
+  --color-shadow-2: rgb(49, 53, 58, 0.2);
+
+  --color-text: rgb(187, 193, 198);
+}
