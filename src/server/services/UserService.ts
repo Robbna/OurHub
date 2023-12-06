@@ -1,17 +1,14 @@
-import type { INewUser, IUserDto } from "@/common/data/user";
-import { signup } from "./FirebaseService";
+import type { IPublicUser } from "@/common/data/user";
+import { signupUserWithEmailAndPassword, loginWithEmailAndPassword, logout } from "./FirebaseService";
 
-export const signUpUser = async (user: INewUser) => {
-  return await signup(user);
+export const signupUser = async (user: IPublicUser) => {
+  return await signupUserWithEmailAndPassword(user);
 };
 
-export const loginUser = async (user: INewUser) => {
-  return await login(user);
+export const loginUser = async (user: IPublicUser) => {
+  return await loginWithEmailAndPassword(user);
 };
 
-export const logout = async () => {
+export const logoutUser = async () => {
   await logout();
-};
-export const login = (user: INewUser) => {
-  throw new Error("Function not implemented.");
 };

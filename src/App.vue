@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MaintenanceView from "./views/shared/MaintenanceView.vue";
+import MaintenanceView from "./views/shared/maintenance_view/MaintenanceView.vue";
 import { ref, onBeforeMount } from "vue";
 import { getMaintenanceMode } from "@/server/services/FirebaseService";
 
@@ -12,6 +12,7 @@ const maintenanceMode = ref(false);
 const isMainContentVisible = ref(false);
 
 onBeforeMount(async () => {
+  // const isMaintenance = false;
   const isMaintenance = await getMaintenanceMode();
   maintenanceMode.value = isMaintenance;
   isMainContentVisible.value = !isMaintenance;

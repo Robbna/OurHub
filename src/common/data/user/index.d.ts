@@ -1,4 +1,4 @@
-export interface INewUser {
+export interface IPublicUser {
   username: string;
   email: string;
   password: string;
