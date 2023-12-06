@@ -1,0 +1,20 @@
+@import url("styles/fonts.css");
+@import url("styles/colors.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Campton", system-ui;
+}
+
+body {
+  background-color: var(--color-1);
+  transition: background-color 0.3s ease;
+}
+
+[debug],
+[debug] * {
+  border: 2.3px dotted rgb(223, 4, 223);
+}
