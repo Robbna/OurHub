@@ -1,3 +1,3 @@
-import { type IUserRepository } from "@/server/repositories/types/user_repository";
+import { type IUserRepository } from "@/server/repositories/types/user";
 
 export { IUserRepository };

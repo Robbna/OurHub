@@ -1,12 +1,13 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { child, get, getDatabase, ref } from "firebase/database";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword
 } from "firebase/auth";
+
 import type { IUserRepository } from "../types";
-import type { IUserDto, INewUser } from "@/server/data";
+import type { IUserDto, INewUser } from "@/common/data/user";
 import { Log } from "@/server/utils/logger/LogUtils";
 
 export class FirebaseRepository implements IUserRepository {
@@ -81,6 +82,26 @@ export class FirebaseRepository implements IUserRepository {
       Log("INFO", "User logged out!");
     } catch (error: any) {
       Log("ERROR", error.message);
+    }
+  };
+
+  getMaintenanceMode = async (): Promise<boolean> => {
+    try {
+      get(child(ref(getDatabase()), `config`))
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            console.log(snapshot.val());
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      return true;
+    } catch (error: any) {
+      Log("ERROR", error.message);
+      return false;
     }
   };
 }

@@ -1,6 +1,6 @@
-import type { INewUser, IUserDto } from "../data";
-import { FirebaseRepository } from "../repositories/firebase/FirebaseRepository";
-import type { IUserRepository } from "../repositories/types";
+import type { INewUser, IUserDto } from "@/common/data/user";
+import { FirebaseRepository } from "@/server/repositories/firebase/FirebaseRepository";
+import type { IUserRepository } from "@/server/repositories/types";
 
 class UserService {
   private service: IUserRepository;
