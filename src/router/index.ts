@@ -7,21 +7,21 @@ export const router = createRouter({
     {
       path: "/",
       name: "landing",
-      component: () => import("@/views/public/LandingView.vue")
+      component: () => import("@/views/public/landing_view/LandingView.vue")
     },
     {
       path: "/signup",
       name: "signup",
-      component: () => import("@/views/public/SignUpView.vue")
+      component: () => import("@/views/public/signup_view/SignupView.vue")
     },
     {
       path: "/home",
       name: "home",
-      component: () => import("@/views/private/HomeView.vue")
+      component: () => import("@/views/private/home_view/HomeView.vue")
     },
     {
       path: "/:pathMatch(.*)*",
-      component: () => import("@/views/shared/NotFoundView.vue")
+      component: () => import("@/views/shared/not_found_view/NotFoundView.vue")
     }
   ]
 });

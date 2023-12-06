@@ -4,9 +4,13 @@ import type { IUserDto } from "@/common/data/user";
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<IUserDto | null>(null);
-  function setUser(userDto: IUserDto | null) {
+  const setUser = (userDto: IUserDto | null) => {
     user.value = userDto;
-  }
+  };
 
-  return { user, setUser };
+  const clearUser = () => {
+    setUser(null);
+  };
+
+  return { user, setUser, clearUser };
 });

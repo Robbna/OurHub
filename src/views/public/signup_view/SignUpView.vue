@@ -2,11 +2,15 @@
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { router } from "@/router";
-import { signUpUser, loginUser, logout } from "@/server/services/UserService";
+import { signupUser, loginUser, logoutUser } from "@/server/services/UserService";
+import { consoleLog } from "@/server/utils/logger/LogUtils";
+
+import GoogleButton from "./components/google_button/GoogleButton.vue";
+
+const { setUser, clearUser } = useUserStore();
 
 const FORM = ref<HTMLFormElement | null>(null);
 const showSpinner = ref(false);
-const { setUser } = useUserStore();
 
 const handleSignup = async () => {
   if (!FORM.value) return;
@@ -15,46 +19,64 @@ const handleSignup = async () => {
 
   const { username, email, password } = Object.fromEntries(new FormData(FORM.value).entries());
 
-  const newUser = await signUpUser({
-    username: username.toString(),
-    email: email.toString(),
-    password: password.toString()
-  });
+  try {
+    const newUser = await signupUser({
+      username: username.toString(),
+      email: email.toString(),
+      password: password.toString()
+    });
 
-  showSpinner.value = false;
-
-  if (newUser) {
-    setUser(newUser);
-    router.push({ name: "home" });
-    FORM.value.reset();
+    if (newUser) {
+      setUser(newUser);
+      router.push({ name: "home" });
+      FORM.value.reset();
+    }
+  } catch (error) {
+    consoleLog("ERROR", error);
+  } finally {
+    showSpinner.value = false;
   }
 };
 const handleLogin = async () => {
   if (!FORM.value) return;
   const { username, email, password } = Object.fromEntries(new FormData(FORM.value).entries());
 
-  const newUser = await loginUser({
-    username: username.toString(),
-    email: email.toString(),
-    password: password.toString()
-  });
+  try {
+    const newUser = await loginUser({
+      username: username.toString(),
+      email: email.toString(),
+      password: password.toString()
+    });
 
-  if (newUser) {
-    setUser(newUser);
-    router.push({ name: "home" });
-    FORM.value.reset();
+    if (newUser) {
+      setUser(newUser);
+      router.push({ name: "home" });
+      FORM.value.reset();
+    }
+  } catch (error) {
+    consoleLog("ERROR", error);
   }
 };
 
-const handleGetUserData = async () => {
-  // await getUserData();
+const handleLoginWithGoogle = async () => {
+  try {
+    // const newUser = await loginWithGoogle();
+    // if (newUser) {
+    //   setUser(newUser);
+    //   router.push({ name: "home" });
+    // }
+  } catch (error) {
+    consoleLog("ERROR", error);
+  }
 };
-const handleGetUsers = async () => {
-  // await getUsers();
-};
+
 const handleLogout = async () => {
-  await logout();
-  setUser(null);
+  try {
+    await logoutUser();
+    clearUser();
+  } catch (error) {
+    consoleLog("ERROR", error);
+  }
 };
 </script>
 <template>
@@ -66,9 +88,9 @@ const handleLogout = async () => {
       <input placeholder="password" name="password" type="password" />
       <button @click="handleSignup">Sign up</button>
       <button @click="handleLogin">Login</button>
-      <button @click="handleGetUserData">Test auth</button>
       <button @click="handleLogout">Logout</button>
-      <button @click="handleGetUsers">Get users</button>
+
+      <GoogleButton :is-disabled="false" :on-click="handleLoginWithGoogle" />
     </form>
   </div>
 </template>
@@ -94,4 +116,3 @@ button {
   border-radius: 6px;
 }
 </style>
-@/server/services/UserService @/common/composables/useToast

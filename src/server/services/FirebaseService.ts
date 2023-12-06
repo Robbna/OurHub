@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { child, get, getDatabase, ref } from "firebase/database";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-import type { IUserDto, INewUser } from "@/common/data/user";
+import type { IUserDto, IPublicUser } from "@/common/data/user";
 import { consoleLog } from "@/server/utils/logger/LogUtils";
 
 const app = initializeApp({
@@ -19,7 +19,7 @@ const app = initializeApp({
 const auth = getAuth(app);
 const database = getDatabase(app);
 
-export const signup = async (user: INewUser): Promise<IUserDto> => {
+export const signupUserWithEmailAndPassword = async (user: IPublicUser): Promise<IUserDto> => {
   const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
   const userSignedUp: IUserDto = {
     username: userCredential.user.displayName,
@@ -29,7 +29,7 @@ export const signup = async (user: INewUser): Promise<IUserDto> => {
   };
   return userSignedUp;
 };
-export const consoleLogin = async (user: INewUser): Promise<IUserDto> => {
+export const loginWithEmailAndPassword = async (user: IPublicUser): Promise<IUserDto> => {
   const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
   const userconsoleLoggedIn: IUserDto = {
     username: userCredential.user.displayName,
@@ -39,7 +39,7 @@ export const consoleLogin = async (user: INewUser): Promise<IUserDto> => {
   };
   return userconsoleLoggedIn;
 };
-export const consoleLogout = async (): Promise<void> => {
+export const logout = async (): Promise<void> => {
   if (!auth.currentUser) {
     consoleLog("ERROR", "No user is currently consoleLogged in!");
     return;
