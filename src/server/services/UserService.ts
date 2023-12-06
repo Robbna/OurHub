@@ -1,25 +1,17 @@
 import type { INewUser, IUserDto } from "@/common/data/user";
-import { FirebaseRepository } from "@/server/repositories/firebase/FirebaseRepository";
-import type { IUserRepository } from "@/server/repositories/types";
+import { signup } from "./FirebaseService";
 
-class UserService {
-  private service: IUserRepository;
+export const signUpUser = async (user: INewUser) => {
+  return await signup(user);
+};
 
-  constructor() {
-    this.service = new FirebaseRepository();
-  }
+export const loginUser = async (user: INewUser) => {
+  return await login(user);
+};
 
-  signUpUser = async (user: INewUser): Promise<IUserDto | null> => {
-    return await this.service.signup(user);
-  };
-
-  loginUser = async (user: INewUser): Promise<IUserDto | null> => {
-    return await this.service.login(user);
-  };
-
-  logout = async (): Promise<void> => {
-    await this.service.logout();
-  };
-}
-
-export const userService = new UserService();
+export const logout = async () => {
+  await logout();
+};
+export const login = (user: INewUser) => {
+  throw new Error("Function not implemented.");
+};

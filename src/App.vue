@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import MaintenanceView from "./views/shared/MaintenanceView.vue";
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { getMaintenanceMode } from "@/server/services/FirebaseService";
 
 const BODY_ELEMENT = ref(document.body);
 
 const changeTheme = () => {
   BODY_ELEMENT.value.classList.toggle("dark-theme");
 };
-const maintenanceMode = ref(true);
+const maintenanceMode = ref(false);
+const isMainContentVisible = ref(false);
+
+onBeforeMount(async () => {
+  const isMaintenance = await getMaintenanceMode();
+  maintenanceMode.value = isMaintenance;
+  isMainContentVisible.value = !isMaintenance;
+});
 </script>
 
 <template>
   <div v-if="maintenanceMode" class="maintenance-view">
     <MaintenanceView />
   </div>
-  <div v-if="!maintenanceMode" class="app-content" ref="appContentElement">
+  <div v-if="isMainContentVisible" class="app-content" ref="appContentElement">
     <div class="navbar-wrapper flex justify-evenly">
       <nav class="navbar flex gap-6">
         <router-link class="router-link" to="/">/</router-link>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { userService } from "@/server/services/UserService";
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { router } from "@/router";
+import { signUpUser, loginUser, logout } from "@/server/services/UserService";
 
 const FORM = ref<HTMLFormElement | null>(null);
 const showSpinner = ref(false);
@@ -13,11 +13,9 @@ const handleSignup = async () => {
 
   showSpinner.value = true;
 
-  const { username, email, password } = Object.fromEntries(
-    new FormData(FORM.value).entries()
-  );
+  const { username, email, password } = Object.fromEntries(new FormData(FORM.value).entries());
 
-  const newUser = await userService.signUpUser({
+  const newUser = await signUpUser({
     username: username.toString(),
     email: email.toString(),
     password: password.toString()
@@ -33,11 +31,9 @@ const handleSignup = async () => {
 };
 const handleLogin = async () => {
   if (!FORM.value) return;
-  const { username, email, password } = Object.fromEntries(
-    new FormData(FORM.value).entries()
-  );
+  const { username, email, password } = Object.fromEntries(new FormData(FORM.value).entries());
 
-  const newUser = await userService.loginUser({
+  const newUser = await loginUser({
     username: username.toString(),
     email: email.toString(),
     password: password.toString()
@@ -57,7 +53,7 @@ const handleGetUsers = async () => {
   // await getUsers();
 };
 const handleLogout = async () => {
-  await userService.logout();
+  await logout();
   setUser(null);
 };
 </script>

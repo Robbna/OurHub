@@ -1,6 +1,6 @@
 type LOG_TYPE = "INFO" | "WARN" | "ERROR";
 
-export const Log = (type: LOG_TYPE, message: string) => {
+export const consoleLog = (type: LOG_TYPE, message: string) => {
   const date = new Date();
   const time = date.toLocaleTimeString();
   const log = `[${time}] ${type}: ${message}`;
