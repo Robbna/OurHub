@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
 import { child, get, getDatabase, ref } from "firebase/database";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "firebase/auth";
 
 import type { IUserDto, IPublicUser } from "@/common/data/user";
 import { consoleLog } from "@/server/utils/logger/LogUtils";
@@ -18,8 +24,9 @@ const app = initializeApp({
 
 const auth = getAuth(app);
 const database = getDatabase(app);
+const googleProvider = new GoogleAuthProvider();
 
-export const signupUserWithEmailAndPassword = async (user: IPublicUser): Promise<IUserDto> => {
+const signupUserWithEmailAndPassword = async (user: IPublicUser): Promise<IUserDto> => {
   const userCredential = await createUserWithEmailAndPassword(auth, user.email, user.password);
   const userSignedUp: IUserDto = {
     username: userCredential.user.displayName,
@@ -29,17 +36,36 @@ export const signupUserWithEmailAndPassword = async (user: IPublicUser): Promise
   };
   return userSignedUp;
 };
-export const loginWithEmailAndPassword = async (user: IPublicUser): Promise<IUserDto> => {
+
+const loginUserWithGoogle = async (): Promise<IUserDto> => {
+  const result = await signInWithPopup(auth, googleProvider);
+  // This gives you a Google Access Token. You can use it to access the Google API.
+  // const credential = GoogleAuthProvider.credentialFromResult(result);
+  // if (credential) {
+  //   const token = credential.accessToken;
+  //   const user = result.user;
+  // }
+  const userLoggedIn: IUserDto = {
+    username: result.user.displayName,
+    email: result.user.email,
+    lastSignInTime: result.user.metadata.lastSignInTime,
+    creationTime: result.user.metadata.creationTime
+  };
+
+  return userLoggedIn;
+};
+
+const loginWithEmailAndPassword = async (user: IPublicUser): Promise<IUserDto> => {
   const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
-  const userconsoleLoggedIn: IUserDto = {
+  const userLoggedIn: IUserDto = {
     username: userCredential.user.displayName,
     email: userCredential.user.email,
     lastSignInTime: userCredential.user.metadata.lastSignInTime,
     creationTime: userCredential.user.metadata.creationTime
   };
-  return userconsoleLoggedIn;
+  return userLoggedIn;
 };
-export const logout = async (): Promise<void> => {
+const logout = async (): Promise<void> => {
   if (!auth.currentUser) {
     consoleLog("ERROR", "No user is currently consoleLogged in!");
     return;
@@ -47,7 +73,9 @@ export const logout = async (): Promise<void> => {
   await auth.signOut();
 };
 
-export const getMaintenanceMode = async (): Promise<boolean> => {
+const getMaintenanceMode = async (): Promise<boolean> => {
   const snapshot = await get(child(ref(database), "config"));
   return snapshot.exists() ? snapshot.val().maintenanceMode : false;
 };
+
+export default { signupUserWithEmailAndPassword, loginUserWithGoogle, loginWithEmailAndPassword, logout, getMaintenanceMode };

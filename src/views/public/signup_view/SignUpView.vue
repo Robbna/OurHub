@@ -2,10 +2,10 @@
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { router } from "@/router";
-import { signupUser, loginUser, logoutUser } from "@/server/services/UserService";
+import { signupUser, loginUser, logoutUser, loginUserWithGoogle } from "@/server/services/UserService";
 import { consoleLog } from "@/server/utils/logger/LogUtils";
 
-import GoogleButton from "./components/google_button/GoogleButton.vue";
+import PlatformButton from "@/views/public/signup_view/components/platform_button/PlatformButton.vue";
 
 const { setUser, clearUser } = useUserStore();
 
@@ -60,11 +60,11 @@ const handleLogin = async () => {
 
 const handleLoginWithGoogle = async () => {
   try {
-    // const newUser = await loginWithGoogle();
-    // if (newUser) {
-    //   setUser(newUser);
-    //   router.push({ name: "home" });
-    // }
+    const newUser = await loginUserWithGoogle();
+    if (newUser) {
+      setUser(newUser);
+      router.push({ name: "home" });
+    }
   } catch (error) {
     consoleLog("ERROR", error);
   }
@@ -89,8 +89,10 @@ const handleLogout = async () => {
       <button @click="handleSignup">Sign up</button>
       <button @click="handleLogin">Login</button>
       <button @click="handleLogout">Logout</button>
-
-      <GoogleButton :is-disabled="false" :on-click="handleLoginWithGoogle" />
+      <div class="flex flex-col items-center">
+        <small>Or continue with</small>
+        <PlatformButton text="Google" platform="google" :is-disabled="false" :on-click="handleLoginWithGoogle" />
+      </div>
     </form>
   </div>
 </template>
