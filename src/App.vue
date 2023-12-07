@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { getMaintenanceMode } from "./server/services/ConfigService";
 import MaintenanceView from "./views/shared/maintenance_view/MaintenanceView.vue";
 import { ref, onBeforeMount } from "vue";
-import { getMaintenanceMode } from "@/server/services/FirebaseService";
 
 const BODY_ELEMENT = ref(document.body);
 
